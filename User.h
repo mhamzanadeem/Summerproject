@@ -44,5 +44,41 @@ public:
 	//Function for signin
 	void signin();
 };
+///////////////////////////--STUDENT--///////////////////////////////////
+
+class Student :public User
+{
+	string RollNumber;
+	string* enrolledClasses;
+	int noEnrolledClasses;
+	int maxEnrolledClasses;
+public:
+	Student(string n = "", string m = "", string id = "", string pass = "",string num = "", string rol = "");
+	Student(const Student& other);
+	void setRollNumber(const string& rol);
+	string getRollNumber() const;
+	~Student();
+	//// Enroll in a class
+	//void newEnrollment(const string& className);
+
+	//// View enrolled classes
+	//void viewEnrolledClasses() const;
+
+
+	//Operator Overloading
+	//Assignment Operator
+	Student& operator=(const Student& other);
+
+};
+
+
+///////////////////////////--TEACHER--///////////////////////////////////
+class Teacher :public User
+{
+	string subject;
+public:
+	Teacher(string n = "", string m = "", string id = "", string pass = "",string num = "", string sub = "");
+
+};
 
 #endif // !USER_H
