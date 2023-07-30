@@ -30,31 +30,41 @@ int mainMenu()
 {
     int option;
     cout << "\n\t*********** FAST CLASSROOM MANAGEMENT SYSTEM ***********\n";
-    cout << "\n\t\t>>Please Choose One Option \n";
-    cout << "\n\t\t1.Student\n\n\t\t2.Teacher\n\n\t\t3.Close Application\n";
+    cout << "\n\t\t>>Please Choose One Option\n";
+    cout << "\n\t\t1.Student\n";
+    cout << "\n\t\t2.Teacher\n";
+    cout << "\n\t\t3.Close Application\n";
     cout << "\n\t\tEnter your choice : ";
     option = getIntInput();
     return option;
 }
 
-// Function to display the student menu and get student choice
+
+// Function to display the basic start menu and get choice
+int startMenu()
+{
+    int option;
+    cout << "\n\t\t1.Sign Up\n\n\t\t2.Login\n\n\t\t3.Back\n";
+    cout << "\n\t\tEnter your choice : ";
+    option = getIntInput();
+    return option;
+}
+// Function to display the student to perform actions
 int studentMenu()
 {
     int option;
     cout << "\n\t\t*********** Student ***********\n";
-    cout << "\n\t\t1.Sign Up\n\n\t\t2.Login\n\n\t\t3.Back\n";
-    cout << "\n\t\tEnter your choice : ";
+    cout << "\n\t\t1.Join a ClassRoom\n\n\t\t2.Leave a ClassRoom\n";
     option = getIntInput();
     return option;
-}
 
-// Function to display the teacher menu and get teacher choice
+}
+// Function to display the teacher to perform actions
 int teacherMenu()
 {
     int option;
     cout << "\n\t\t*********** Teacher ***********\n";
-    cout << "\n\t\t1.Sign Up\n\n\t\t2.Login\n\n\t\t3.Back\n";
-    cout << "\n\t\tEnter your choice : ";
+    cout << "\n\t\t1.Create a ClassRoom\n\n\t\t2.Join a ClassRoom\n\n\t\t3.Delete a ClassRoom\n";
     option = getIntInput();
     return option;
 }
@@ -69,8 +79,9 @@ int main()
         case 1:
         {
             system("cls");
-            int studentOption = studentMenu();
-            switch (studentOption)
+            cout << "\n\t\t*********** Student ***********\n";
+            int choice = startMenu();
+            switch (choice)
             {
             case 1:
             {
@@ -85,8 +96,11 @@ int main()
                 system("cls");
                 Student s1;
                 s1.Login();
+                //cout << s1.getRollNumber() << endl;
                 _getwch();
                 system("cls");
+                int studentOption = studentMenu();
+
                 break;
             }
             case 3:
@@ -103,8 +117,9 @@ int main()
         case 2:
         {
             system("cls");
-            int teacherOption = teacherMenu();
-            switch (teacherOption)
+            cout << "\n\t\t*********** Teacher ***********\n";
+            int choice = startMenu();
+            switch (choice)
             {
             case 1:
             {
@@ -121,6 +136,14 @@ int main()
                 t1.Login();
                 _getwch();
                 system("cls");
+                int teacherOption = teacherMenu();
+                switch (teacherOption)
+                {
+                case 1:
+                    {
+                        t1.createClass();
+                    }
+                }
                 break;
             }
             case 3:
