@@ -1,4 +1,4 @@
-#include "user.h"
+#include "User.h"
 
 User::User(string n, string m, string id, string pass)
 {
@@ -30,22 +30,22 @@ string User::getPassword() const
 }
 
 // Setter functions
-void User::setName(const string &n)
+void User::setName(const string& n)
 {
     name = n;
 }
 
-void User::setEmail(const string &m)
+void User::setEmail(const string& m)
 {
     email = m;
 }
 
-void User::setLoginID(const string &id)
+void User::setLoginID(const string& id)
 {
     loginID = id;
 }
 
-void User::setPassword(const string &pass)
+void User::setPassword(const string& pass)
 {
     password = pass;
 }
@@ -60,7 +60,7 @@ Student::Student(string n, string m, string id, string pass, string rol)
     RollNumber = rol;
 }
 
-Student::Student(const Student &other)
+Student::Student(const Student& other)
     : User(other), enrolledClasses(nullptr), noEnrolledClasses(other.noEnrolledClasses), maxEnrolledClasses(other.maxEnrolledClasses)
 {
     if (noEnrolledClasses > 0)
@@ -77,7 +77,7 @@ Student::~Student()
 {
     delete[] enrolledClasses;
 }
-Student &Student::operator=(const Student &other)
+Student& Student::operator=(const Student& other)
 {
     if (this == &other)
     {
@@ -86,7 +86,7 @@ Student &Student::operator=(const Student &other)
 
     // Call the base class assignment operator
     User::operator=(other);
-
+    RollNumber = other.getRollNumber();
     // Deallocate the old memory
     delete[] enrolledClasses;
 
@@ -114,7 +114,7 @@ Student &Student::operator=(const Student &other)
     return *this;
 }
 
-void Student::setRollNumber(const string &rol)
+void Student::setRollNumber(const string& rol)
 {
     RollNumber = rol;
 }
@@ -123,14 +123,14 @@ string Student::getRollNumber() const
     return RollNumber;
 }
 void Student::signup()
-{   
-    
-    ofstream Id("id.txt", ios::app);
-    ofstream pass("Password.txt", ios::app);
+{
+
+    ofstream Id("S_id.txt", ios::app);
+    ofstream pass("S_Password.txt", ios::app);
     cout << "\n\t\t*********** Sign Up ***********\n";
     cout << "\n\t\tEnter your name : ";
     string name;
-    cin.ignore();
+    //cin.ignore();
     getline(cin, name);
     setName(name);
 
@@ -155,7 +155,7 @@ void Student::signup()
     setPassword(password);
 
     cout << "\n\t\tAccount created successfully :)\n";
-    getch();
+    _getwch();
     system("cls");
 
     Id << id << "\n";
@@ -164,19 +164,19 @@ void Student::signup()
     cout << "Saved To Database!\n"; // Corrected the typo in the cout statement
 }
 
-void Student::signin()
+void Student::Login()
 {
 
-    ifstream idFile("id.txt");
-    ifstream passFile("Password.txt");
+    ifstream idFile("S_id.txt");
+    ifstream passFile("S_Password.txt");
 
-    cout << "Welcome Member, Please Enter Your Username and Password:\n\n";
-    cout << "ID: ";
+    cout << "\t\tWelcome Member, Please Enter Your Username and Password:\n\n";
+    cout << "Enter your Login ID: ";
     string id;
-    cin.ignore();
+    //cin.ignore();
     getline(cin, id);
 
-    cout << "Password: ";
+    cout << "Enter you Password: ";
     string inputPassword;
     getline(cin, inputPassword);
 
@@ -216,13 +216,13 @@ Teacher::Teacher(string n, string m, string id, string pass, string sub)
 
 void Teacher::signup()
 {
-    
+
     ofstream ID("id.txt", ios::app);
     ofstream pass("Password.txt", ios::app);
     cout << "\n\t\t*********** Sign Up ***********\n";
     cout << "\n\t\tEnter your name : ";
     string name;
-    cin.ignore();
+    //cin.ignore();
     getline(cin, name);
     setName(name);
 
@@ -247,7 +247,7 @@ void Teacher::signup()
     setPassword(password);
 
     cout << "\n\t\tAccount created successfully :)\n";
-    getch();
+    _getwch();
     system("cls");
 
     ID << id << "\n";
@@ -255,15 +255,15 @@ void Teacher::signup()
 
     cout << "Saved To Database!\n"; // Corrected the typo in the cout statement
 }
-void Teacher::signin()
+void Teacher::Login()
 {
-    ifstream idFile("id.txt");
-    ifstream passFile("Password.txt");
+    ifstream idFile("T_id.txt");
+    ifstream passFile("T_Password.txt");
 
     cout << "Welcome Member, Please Enter Your Username and Password:\n\n";
     cout << "ID: ";
     string id;
-    cin.ignore();
+    //cin.ignore();
     getline(cin, id);
 
     cout << "Password: ";
@@ -292,7 +292,7 @@ void Teacher::displayUserData() const
     cout << "Password: " << password << "\n";
 }
 
-void Teacher::setSubject(const string &sub)
+void Teacher::setSubject(const string& sub)
 {
     subject = sub;
 }
