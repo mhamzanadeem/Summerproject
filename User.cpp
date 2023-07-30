@@ -124,7 +124,9 @@ string Student::getRollNumber() const
 }
 void Student::signup()
 {
-
+    ofstream mail("S_mail.txt", ios::app);
+    ofstream roll("S_rollNumber.txt", ios::app);
+    ofstream nam("S_name.txt", ios::app);
     ofstream Id("S_id.txt", ios::app);
     ofstream pass("S_Password.txt", ios::app);
     cout << "\n\t\t*********** Sign Up ***********\n";
@@ -158,15 +160,20 @@ void Student::signup()
     _getwch();
     system("cls");
 
+    nam << name << "\n";
+    mail << email << "\n";
+    roll << rollnumber << "\n";
     Id << id << "\n";
-    pass << password << "\n\n";
+    pass << password << "\n";
 
     cout << "Saved To Database!\n"; // Corrected the typo in the cout statement
 }
 
 void Student::Login()
 {
-
+    ifstream mailFile("S_mail.txt");
+    ifstream rollFile("S_rollNumber.txt");
+    ifstream namFile("S_name.txt");
     ifstream idFile("S_id.txt");
     ifstream passFile("S_Password.txt");
 
@@ -180,12 +187,19 @@ void Student::Login()
     string inputPassword;
     getline(cin, inputPassword);
 
+
+    string namLine;
+    string mailLine;
+    string rolLine;
     string idLine;
     string passLine;
-    while (getline(idFile, idLine) && getline(passFile, passLine))
+    while (getline(idFile, idLine) && getline(passFile, passLine) && getline(namFile, namLine) && getline(rollFile, rolLine) && getline(mailFile, mailLine))
     {
         if (idLine == id && passLine == inputPassword)
         {
+            this->setName(namLine);
+            this->setEmail(mailLine);
+            this->setRollNumber(rolLine);
             cout << "\nLogin Successful!\n";
             return; // Exit the function after successful login
         }
@@ -208,17 +222,20 @@ void Student::displayUserData() const
 /////////////////////////////////////////////////////////////////////
 
 Teacher::Teacher(string n, string m, string id, string pass, string sub)
-    : User(n, m, id, pass)
+    : User(n, m, id, pass),
+    ClassRooms(nullptr), subject(sub),numberOfClasses(0),maxNumberOfClasses(0) {}
+
+Teacher::~Teacher()
 {
-    subject = sub;
+    delete[] ClassRooms;
 }
-
-
 void Teacher::signup()
 {
-
-    ofstream ID("id.txt", ios::app);
-    ofstream pass("Password.txt", ios::app);
+    ofstream mail("T_mail.txt", ios::app);
+    ofstream sub("T_subject.txt", ios::app);
+    ofstream nam("T_name.txt", ios::app);
+    ofstream ID("T_id.txt", ios::app);
+    ofstream pass("T_Password.txt", ios::app);
     cout << "\n\t\t*********** Sign Up ***********\n";
     cout << "\n\t\tEnter your name : ";
     string name;
@@ -250,13 +267,19 @@ void Teacher::signup()
     _getwch();
     system("cls");
 
+    nam << name << "\n";
+    mail << email << "\n";
+    sub << subject << "\n";
     ID << id << "\n";
-    pass << password << "\n\n";
+    pass << password << "\n";
 
     cout << "Saved To Database!\n"; // Corrected the typo in the cout statement
 }
 void Teacher::Login()
 {
+    ifstream mailFile("T_mail.txt");
+    ifstream subFile("T_subject.txt");
+    ifstream namFile("T_name.txt");
     ifstream idFile("T_id.txt");
     ifstream passFile("T_Password.txt");
 
@@ -270,12 +293,18 @@ void Teacher::Login()
     string inputPassword;
     getline(cin, inputPassword);
 
+    string mailLine;
+    string subLine;
+    string namLine;
     string idLine;
     string passLine;
-    while (getline(idFile, idLine) && getline(passFile, passLine))
+    while (getline(idFile, idLine) && getline(passFile, passLine) && getline(namFile, namLine) && getline(subFile, subLine) && getline(mailFile, mailLine))
     {
         if (idLine == id && passLine == inputPassword)
         {
+            this->setName(namLine);
+            this->setEmail(mailLine);
+            this->setSubject(subLine);
             cout << "\nLogin Successful!\n";
             return; // Exit the function after successful login
         }
@@ -299,4 +328,23 @@ void Teacher::setSubject(const string& sub)
 string Teacher::getSubject() const
 {
     return subject;
+}
+
+void Teacher::createClass()
+{
+    numberOfClasses++;
+	if (ClassRooms != nullptr)
+	{
+        ClassRoom** temp = new ClassRoom * [numberOfClasses];
+		for (int i = 0; i < numberOfClasses - 1; i++)
+		{
+            temp[i] = ClassRooms[i];
+		}
+        delete[] ClassRooms;
+        ClassRooms=temp;
+	}
+    else
+        ClassRooms = new ClassRoom * [numberOfClasses];
+    /*ClassRooms[numberOfClasses]->setTeacher(*this);
+    ClassRooms[numberOfClasses]->setValues();*/
 }
