@@ -6,6 +6,8 @@
 #include <string>
 #include <sstream>
 #include <conio.h>
+#include "Class.h"
+
 using namespace std;
 
 class User
@@ -55,10 +57,10 @@ public:
 	string getRollNumber() const;
 	~Student();
 	//// Enroll in a class
-	void newEnrollment(const string& className);
+	//void newEnrollment(const string& className);
 
 	//// View enrolled classes
-	void viewEnrolledClasses() const;
+	//void viewEnrolledClasses() const;
 
 	// Operator Overloading
 	// Assignment Operator
@@ -77,11 +79,15 @@ public:
 ///////////////////////////--TEACHER--///////////////////////////////////
 class Teacher : public User
 {
-public:
 	string subject;
+	ClassRoom ** ClassRooms;
+	int numberOfClasses;
+	int maxNumberOfClasses;
 
+public:
+	
 	Teacher(string n = "", string m = "", string id = "", string pass = "", string sub = "");
-
+	~Teacher();
 	void setSubject(const string& sub);
 	string getSubject() const;
 
@@ -95,6 +101,7 @@ public:
 	// Function for Login
 	void Login();
 
+	void createClass();
 	Teacher readTeacherDataFromFile(const std::string& filename);
 };
 
