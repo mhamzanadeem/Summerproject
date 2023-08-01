@@ -3,10 +3,11 @@
 #include <string>
 using namespace std;
 
-ClassRoom::ClassRoom(string n, Teacher& t)
+ClassRoom::ClassRoom(string n, Teacher * t ,string c) : teacher(t)
 {
     className = n;
-    teacher = &t;
+    code = c;
+    //teacher = &t;
     //maxStudents = 10;
     //noOfStudents = 0;
     //enrolledStudents = new Student[maxStudents];
@@ -14,6 +15,7 @@ ClassRoom::ClassRoom(string n, Teacher& t)
 ClassRoom::ClassRoom(const ClassRoom& other) : className(other.className)
 //, teacher(other.teacher), noOfStudents(other.noOfStudents), maxStudents(other.maxStudents)
 {
+    code = other.code;
     /*enrolledStudents = new Student[maxStudents];
     for (int i = 0; i < noOfStudents; i++)
     {
@@ -32,6 +34,7 @@ ClassRoom& ClassRoom::operator=(const ClassRoom& other)
     // Copy data from the other object
     className = other.className;
     teacher = other.teacher;
+    code = other.code;
     /*noOfStudents = other.noOfStudents;
     maxStudents = other.maxStudents;*/
 
@@ -87,7 +90,7 @@ Teacher& ClassRoom::getTeacher() const
 std::ostream& operator<<(std::ostream& os, const ClassRoom& classRoom)
 {
     os << "Class Name: " << classRoom.className << "\n";
-    os << "Teacher: " << classRoom.teacher->getName() << "\n";
+    //os << "Teacher: " << classRoom.teacher->getName() << "\n";
     os << "Enrolled Students:\n";
     /*for (int i = 0; i < classRoom.noOfStudents; ++i)
     {
