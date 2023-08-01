@@ -223,11 +223,18 @@ void Student::displayUserData() const
 
 Teacher::Teacher(string n, string m, string id, string pass, string sub)
     : User(n, m, id, pass),
-    ClassRooms(nullptr), subject(sub),numberOfClasses(0),maxNumberOfClasses(0) {}
+     subject(sub),numberOfClasses(0),maxNumberOfClasses(5) 
+{
+    ClassRooms = new ClassRoom * [maxNumberOfClasses];
+}
 
 Teacher::~Teacher()
 {
-    delete[] ClassRooms;
+    for (int i = 0; i < numberOfClasses; ++i)
+    {
+        delete ClassRooms[i]; //Deallocate each ClassRoom object from Array
+    }
+    delete[] ClassRooms; //Delete array of ClassRoom object
 }
 void Teacher::signup()
 {
@@ -330,21 +337,47 @@ string Teacher::getSubject() const
     return subject;
 }
 
-void Teacher::createClass()
+void Teacher::createClassRoom()
 {
-    numberOfClasses++;
-	if (ClassRooms != nullptr)
-	{
-        ClassRoom** temp = new ClassRoom * [numberOfClasses];
-		for (int i = 0; i < numberOfClasses - 1; i++)
-		{
+    if (numberOfClasses >= maxNumberOfClasses)
+    {
+        // If the array is full, resize it by creating a larger array and copying the elements
+        maxNumberOfClasses *= 2;
+        ClassRoom** temp = new ClassRoom * [maxNumberOfClasses];
+        for (int i = 0; i < numberOfClasses; i++)
+        {
             temp[i] = ClassRooms[i];
-		}
+        }
         delete[] ClassRooms;
-        ClassRooms=temp;
-	}
-    else
-        ClassRooms = new ClassRoom * [numberOfClasses];
-    /*ClassRooms[numberOfClasses]->setTeacher(*this);
-    ClassRooms[numberOfClasses]->setValues();*/
+        ClassRooms = temp;
+    }
+
+    cout << "Enter the name of the class: ";
+    string className;
+    //cin.ignore(); // Ignore the newline character in the input buffer
+    getline(cin, className);
+    string code;
+    cout << "Enter the GCR code you want: ";
+    getline(cin, code);
+    
+
+    ClassRooms[numberOfClasses] = new ClassRoom(className, this, code);
+    numberOfClasses++;
+
+    string n = className + ".txt";
+    ofstream classFile(n, ios::app);
+
+    classFile << className << "\n";
+    classFile << code << "\n";
+
+    
+    cout << "Classroom created successfully!" << endl;
+}
+void Teacher::viewClassRoom()
+{
+    cout << "List of created ClassRooms:\n";
+    for (int i = 0; i < numberOfClasses; i++)
+    {
+        cout << ClassRooms[i] << endl;
+    }
 }
