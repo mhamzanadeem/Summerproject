@@ -1,4 +1,5 @@
 #include "User.h"
+#include "Class.h"
 #include <iostream>
 #include <conio.h>
 #include <string>
@@ -141,7 +142,7 @@ int main()
                 {
                 case 1:
                     {
-                        t1.createClass();
+                        t1.createClassRoom();
                     }
                 }
                 break;
