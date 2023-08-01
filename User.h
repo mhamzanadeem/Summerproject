@@ -10,6 +10,8 @@
 
 using namespace std;
 
+//class ClassRoom;
+
 class User
 {
 public:
@@ -101,8 +103,9 @@ public:
 	// Function for Login
 	void Login();
 
-	void createClass();
-	Teacher readTeacherDataFromFile(const std::string& filename);
+	void createClassRoom();
+	void viewClassRoom();
+	//Teacher readTeacherDataFromFile(const std::string& filename);
 };
 
 #endif // !USER_H
