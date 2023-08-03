@@ -55,7 +55,7 @@ int studentMenu()
 {
     int option;
     cout << "\n\t\t*********** Student ***********\n";
-    cout << "\n\t\t1.Join a ClassRoom\n\n\t\t2.Leave a ClassRoom\n";
+    cout << "\n\t\t1.Join a ClassRoom\n\n\t\t2.View a ClassRoom \n\n\t\t3.Leave a ClassRoom\n";
     option = getIntInput();
     return option;
 
@@ -65,7 +65,7 @@ int teacherMenu()
 {
     int option;
     cout << "\n\t\t*********** Teacher ***********\n";
-    cout << "\n\t\t1.Create a ClassRoom\n\n\t\t2.Join a ClassRoom\n\n\t\t3.Delete a ClassRoom\n";
+    cout << "\n\t\t1.Create a ClassRoom\n\n\t\t2.Join a ClassRoom\n\n\t\t3.Delete a ClassRoom\n\n\t\t 4.View a ClassRoom\n\n\t\t5.Logout\n";
     option = getIntInput();
     return option;
 }
@@ -101,7 +101,14 @@ int main()
                 _getwch();
                 system("cls");
                 int studentOption = studentMenu();
-
+                if (studentOption == 1)
+                {
+                    s1.JoinClassRoom();
+                }
+                else if (studentOption == 2)
+                {
+                    s1.ViewClassRoom();
+                }
                 break;
             }
             case 3:
@@ -138,14 +145,43 @@ int main()
                 _getwch();
                 system("cls");
                 int teacherOption = teacherMenu();
-                switch (teacherOption)
+                while (teacherOption != 5)
                 {
-                case 1:
+                    system("cls");
+                    teacherOption = teacherMenu();
+                    switch (teacherOption)
+                    {
+                    case 1:
                     {
                         t1.createClassRoom();
+                        _getwch();
+                        break;
+                    }
+                    case 2:
+                    {
+                        t1.viewClassRoom();
+                        _getwch();
+                        break;
+                    }
+                    case 3:
+                    {
+                        break;
+                    }
+                    case 4:
+                    {
+                        t1.viewClassRoom();
+                        break;
+                    }
+                    case 5:
+                    {
+                        cout << "Teacher is logged out\n";
+                        break;
+                    }
+                    default:
+                        cout << "Invalid input!\n";
+
                     }
                 }
-                break;
             }
             case 3:
                 system("cls");
