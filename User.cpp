@@ -1,5 +1,33 @@
 #include "User.h"
+#include<fstream>
 
+string encryptPassword(const string& password)
+{
+    string encryptedPassword = password;
+    int shiftValue = 5; // Replace 5 with any number you want to add
+    for (char& c : encryptedPassword)
+    {
+        // Add the shift value to each character
+        c += shiftValue;
+    }
+    return encryptedPassword;
+}
+string decryptPassword(const string& encryptedPassword)
+{
+    string decryptedPassword = encryptedPassword;
+    int shiftValue = 5; // Replace 5 with the same number used during encryption
+    for (char& c : decryptedPassword)
+    {
+        // Subtract the shift value from each character to decrypt
+        c -= shiftValue;
+    }
+    cout << "decryptedPassword: " << decryptedPassword << endl;
+    return decryptedPassword;
+}
+
+/////////////////////////////////////////////////////////////////
+/////////////////////////////--User--///////////////////////////
+///////////////////////////////////////////////////////////////
 User::User(string n, string m, string id, string pass)
 {
     name = n;
@@ -13,17 +41,14 @@ string User::getName() const
 {
     return name;
 }
-
 string User::getEmail() const
 {
     return email;
 }
-
 string User::getLoginID() const
 {
     return loginID;
 }
-
 string User::getPassword() const
 {
     return password;
@@ -34,17 +59,14 @@ void User::setName(const string& n)
 {
     name = n;
 }
-
 void User::setEmail(const string& m)
 {
     email = m;
 }
-
 void User::setLoginID(const string& id)
 {
     loginID = id;
 }
-
 void User::setPassword(const string& pass)
 {
     password = pass;
@@ -58,21 +80,24 @@ Student::Student(string n, string m, string id, string pass, string rol)
     : User(n, m, id, pass), enrolledClasses(nullptr), noEnrolledClasses(0), maxEnrolledClasses(10)
 {
     RollNumber = rol;
+    enrolledClasses = new ClassRoom * [maxEnrolledClasses];
+    for (int i = 0; i < noEnrolledClasses; i++)
+    {
+        enrolledClasses[i] = nullptr;
+    }
 }
-
 Student::Student(const Student& other)
     : User(other), enrolledClasses(nullptr), noEnrolledClasses(other.noEnrolledClasses), maxEnrolledClasses(other.maxEnrolledClasses)
 {
     if (noEnrolledClasses > 0)
     {
-        enrolledClasses = new string[maxEnrolledClasses];
+        enrolledClasses = new ClassRoom * [maxEnrolledClasses];
         for (int i = 0; i < noEnrolledClasses; i++)
         {
             enrolledClasses[i] = other.enrolledClasses[i];
         }
     }
 }
-
 Student::~Student()
 {
     delete[] enrolledClasses;
@@ -97,7 +122,7 @@ Student& Student::operator=(const Student& other)
         maxEnrolledClasses = other.maxEnrolledClasses;
 
         // Allocate new memory and copy the data
-        enrolledClasses = new std::string[maxEnrolledClasses];
+        enrolledClasses = new ClassRoom * [maxEnrolledClasses];
         for (int i = 0; i < noEnrolledClasses; i++)
         {
             enrolledClasses[i] = other.enrolledClasses[i];
@@ -113,7 +138,6 @@ Student& Student::operator=(const Student& other)
 
     return *this;
 }
-
 void Student::setRollNumber(const string& rol)
 {
     RollNumber = rol;
@@ -154,6 +178,7 @@ void Student::signup()
     cout << "\n\t\tEnter your password : ";
     string password;
     getline(cin, password);
+    password = encryptPassword(password);
     setPassword(password);
 
     cout << "\n\t\tAccount created successfully :)\n";
@@ -166,9 +191,13 @@ void Student::signup()
     Id << id << "\n";
     pass << password << "\n";
 
+    nam.close();
+    mail.close();
+    roll.close();
+    Id.close();
+    pass.close();
     cout << "Saved To Database!\n"; // Corrected the typo in the cout statement
 }
-
 void Student::Login()
 {
     ifstream mailFile("S_mail.txt");
@@ -186,7 +215,7 @@ void Student::Login()
     cout << "Enter you Password: ";
     string inputPassword;
     getline(cin, inputPassword);
-
+    //inputPassword =  decryptPassword(inputPassword);
 
     string namLine;
     string mailLine;
@@ -195,6 +224,7 @@ void Student::Login()
     string passLine;
     while (getline(idFile, idLine) && getline(passFile, passLine) && getline(namFile, namLine) && getline(rollFile, rolLine) && getline(mailFile, mailLine))
     {
+        passLine = decryptPassword(passLine);
         if (idLine == id && passLine == inputPassword)
         {
             this->setName(namLine);
@@ -207,7 +237,6 @@ void Student::Login()
 
     cout << "\nLogin Failed. Incorrect ID or Password.\n";
 }
-
 void Student::displayUserData() const
 {
     cout << "Name: " << name << "\n";
@@ -216,16 +245,100 @@ void Student::displayUserData() const
     cout << "Login ID: " << loginID << "\n";
     cout << "Password: " << password << "\n";
 }
+void Student::JoinClassRoom()
+{
+    string nameOfClass, codeOfClass;
+    cout << "Enter the name of the Class you want to join: ";
+    getline(cin, nameOfClass);
+    cout << "Enter the code of the classroom: ";
+    getline(cin, codeOfClass);
+    ifstream RecordFile("classRoomRecord.txt");
+    while (!RecordFile.eof())
+    {
+        string checkName, checkCode;
+        RecordFile >> checkName;
+        RecordFile >> checkCode;
+        if (checkName == nameOfClass && checkCode == codeOfClass)
+        {
+            nameOfClass += ".txt";
+            ofstream data(nameOfClass, ios::app);
+            data << " " << this->RollNumber << " ";
+            data << this->name << " ";
+            data << this->email << " ";
+            data << "0";
+            cout << "ClassRoom Joined Successfully." << endl;
+            /* ClassRoom StudentInterfaceClassRoom;*/
 
+            _getwch();
+            system("cls");
+        }
+    }
+}
+void Student::ViewClassRoom()
+{
+    string rollNo;
+    string name;
+    cout << "Enter the name of the classRoom you want to view: ";
+    cin >> name;
+    name += ".txt";
+    ifstream myFile(name);
+    bool flag = false;
+    while (!myFile.eof())
+    {
+        myFile >> rollNo;
+        if (rollNo == this->RollNumber)
+        {
+            flag = true;
+            break;
+        }
+    }
+    if (flag)
+    {
+        string printData;
+        myFile.seekg(0, ios::beg);
+        cout << "\n\nClass Subject: \t";
+        myFile >> printData;
+        cout << printData << endl;
+        cout << "Teacher Mail: \t";
+        myFile >> printData;
+        cout << printData << endl;
+        cout << "Teacher Name: \t";
+        myFile >> printData;
+        cout << printData << endl << endl;
+        cout << "\t\t\t\t\"Student Data\"\n\n";
+        string rollNumberStudent = "";
+        string nameStudent = "";
+        string mailStudent = "";
+        cout << "\"Roll Number\"\t\t\t\"Student Name\"\t\t\t \"Student Mail\"\n";
+        while (!myFile.eof())
+        {
+            myFile >> rollNumberStudent;
+            myFile >> nameStudent;
+            myFile >> mailStudent;
+            if (rollNumberStudent == "0" || nameStudent == "0" || mailStudent == "0")
+                break;
+            cout << rollNumberStudent << "\t\t\t\t  " << nameStudent << "\t\t\t" << mailStudent << endl;
+        }
+    }
+    else
+    {
+        cout << "Error:\t The name of the class you entered either does not exist or you are not enrolled in it!!!" << endl;
+    }
+    _getwch();
+}
 /////////////////////////////////////////////////////////////////////
 ////////////////////////////--TEACHER--//////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
 Teacher::Teacher(string n, string m, string id, string pass, string sub)
     : User(n, m, id, pass),
-     subject(sub),numberOfClasses(0),maxNumberOfClasses(5) 
+    subject(sub), numberOfClasses(0), maxNumberOfClasses(5)
 {
     ClassRooms = new ClassRoom * [maxNumberOfClasses];
+    for (int i = 0; i < numberOfClasses; i++)
+    {
+        ClassRooms[i] = nullptr;
+    }
 }
 
 Teacher::~Teacher()
@@ -280,6 +393,11 @@ void Teacher::signup()
     ID << id << "\n";
     pass << password << "\n";
 
+    nam.close();
+    mail.close();
+    sub.close();
+    ID.close();
+    pass.close();
     cout << "Saved To Database!\n"; // Corrected the typo in the cout statement
 }
 void Teacher::Login()
@@ -327,7 +445,6 @@ void Teacher::displayUserData() const
     cout << "Login ID: " << loginID << "\n";
     cout << "Password: " << password << "\n";
 }
-
 void Teacher::setSubject(const string& sub)
 {
     subject = sub;
@@ -336,7 +453,6 @@ string Teacher::getSubject() const
 {
     return subject;
 }
-
 void Teacher::createClassRoom()
 {
     if (numberOfClasses >= maxNumberOfClasses)
@@ -352,32 +468,81 @@ void Teacher::createClassRoom()
         ClassRooms = temp;
     }
 
+    ofstream classRecord("classRoomRecord.txt", ios::app);
     cout << "Enter the name of the class: ";
     string className;
     //cin.ignore(); // Ignore the newline character in the input buffer
     getline(cin, className);
+
     string code;
     cout << "Enter the GCR code you want: ";
+    classRecord << className << " ";
     getline(cin, code);
-    
-
+    classRecord << code << "\n";
     ClassRooms[numberOfClasses] = new ClassRoom(className, this, code);
     numberOfClasses++;
-
     string n = className + ".txt";
     ofstream classFile(n, ios::app);
-
-    classFile << className << "\n";
-    classFile << code << "\n";
-
-    
+    classFile << this->subject << " ";
+    classFile << this->email << " ";
+    classFile << this->name << " \n";
+    classFile.close();
     cout << "Classroom created successfully!" << endl;
 }
 void Teacher::viewClassRoom()
 {
-    cout << "List of created ClassRooms:\n";
-    for (int i = 0; i < numberOfClasses; i++)
+    /*  cout << "List of created ClassRooms:\n";
+      for (int i = 0; i < numberOfClasses; i++)
+      {
+          cout << i + 1 << ". " << ClassRooms[i]->getClassName() << endl;
+      }*/
+    string teacherNameCheck;
+    string name;
+    cout << "Enter the name of the classRoom you want to view: ";
+    cin >> name;
+    name += ".txt";
+    ifstream myFile(name);
+    bool flag = false;
+    while (!myFile.eof())
     {
-        cout << ClassRooms[i] << endl;
+        myFile >> teacherNameCheck;
+        if (teacherNameCheck == this->name)
+        {
+            flag = true;
+            break;
+        }
     }
+    if (flag)
+    {
+        string printData;
+        myFile.seekg(0, ios::beg);
+        cout << "\n\nClass Subject: \t";
+        myFile >> printData;
+        cout << printData << endl;
+        cout << "Teacher Mail: \t";
+        myFile >> printData;
+        cout << printData << endl;
+        cout << "Teacher Name: \t";
+        myFile >> printData;
+        cout << printData << endl << endl;
+        cout << "\t\t\t\t\"Student Data\"\n\n";
+        string rollNumberStudent = "";
+        string nameStudent = "";
+        string mailStudent = "";
+        cout << "\"Roll Number\"\t\t\t\"Student Name\"\t\t\t \"Student Mail\"\n";
+        while (!myFile.eof())
+        {
+            myFile >> rollNumberStudent;
+            myFile >> nameStudent;
+            myFile >> mailStudent;
+            if (rollNumberStudent == "0" || nameStudent == "0" || mailStudent == "0")
+                break;
+            cout << rollNumberStudent << "\t\t\t\t  " << nameStudent << "\t\t\t" << mailStudent << endl;
+        }
+    }
+    else
+    {
+        cout << "Error:\t The name of the class you entered either does not exist or you are not enrolled in it!!!" << endl;
+    }
+    _getwch();
 }
