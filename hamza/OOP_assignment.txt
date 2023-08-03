@@ -1,0 +1,10 @@
+Title: Assignment 1
+Content: Do this fuck assignment
+Deadline: 4/8/23
+File name: A1.pdf
+-----------------------------------
+Title: A2
+Content: write this shit assignment
+Deadline: 5/8/23
+File name: OOP_assignment.txt
+-----------------------------------
