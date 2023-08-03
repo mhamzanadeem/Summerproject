@@ -49,7 +49,7 @@ class Student : public User
 {
 public:
 	string RollNumber;
-	string* enrolledClasses;
+	ClassRoom** enrolledClasses;
 	int noEnrolledClasses;
 	int maxEnrolledClasses;
 
@@ -60,51 +60,46 @@ public:
 	~Student();
 	//// Enroll in a class
 	//void newEnrollment(const string& className);
-
 	//// View enrolled classes
 	//void viewEnrolledClasses() const;
-
 	// Operator Overloading
 	// Assignment Operator
 	Student& operator=(const Student& other);
-
 	// Function to display user data on the terminal
 	void displayUserData() const override;
-
+	//Function to join the classroom
+	void JoinClassRoom();
 	// Function for signup
 	void signup() override;
-
 	// Function for Login
 	void Login() override;
+	// Function for View the CLassRoom
+	void ViewClassRoom();
 };
 
 ///////////////////////////--TEACHER--///////////////////////////////////
 class Teacher : public User
 {
 	string subject;
-	ClassRoom ** ClassRooms;
+	ClassRoom** ClassRooms;
 	int numberOfClasses;
 	int maxNumberOfClasses;
 
 public:
-	
+
 	Teacher(string n = "", string m = "", string id = "", string pass = "", string sub = "");
 	~Teacher();
 	void setSubject(const string& sub);
 	string getSubject() const;
-
-
 	// Function to display user data on the terminal
 	void displayUserData() const override;
-
 	// Function for signup
 	void signup() override;
-
 	// Function for Login
 	void Login();
-
 	void createClassRoom();
 	void viewClassRoom();
+	//void joinClassRoom();
 	//Teacher readTeacherDataFromFile(const std::string& filename);
 };
 
