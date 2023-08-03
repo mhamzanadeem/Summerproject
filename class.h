@@ -5,33 +5,57 @@
 
 #include <iostream>
 #include <string>
+#include "Assignment.h"
 //#include "User.h"
 using namespace std;
 
 class Teacher;
+class Student;
+class Assignment;
 
 class ClassRoom
 {
 	string className;
 	Teacher* teacher;
 	string code;
-	//Student* enrolledStudents;
-	//int noOfStudents;
+	Student** enrolledStudents;
+	int noOfStudents;
+	int maxStudents;
+	Assignment* assignment;
+	bool hasAssignment;
+
 	//int noOfTeachers;
 	//int maxTeachers;
-	//int maxStudents;
 public:
-	ClassRoom(string n, Teacher * teach, string code);
+	ClassRoom();
+	ClassRoom(string n, Teacher* teach, string code);
 	ClassRoom(const ClassRoom& other); // Copy constructor
 	~ClassRoom();
 
+	//Setters
+	void setClassName(const string& n);
+	void setCode(const string& c);
 	void setTeacher(Teacher& t); //teacher
-	//void enrollStudent(const Student& student); //Enrollment
-	//void viewEnrolledStudents() const; //View Students
+	void setNoOfStudents(int count);
+	void setMaxStudents(int max);
 
+	//Getters
+	string getClassName() const;
 	Teacher& getTeacher() const;
+	string getCode() const;
+	int getNoOfStudents() const;
+	int getMaxStudents() const;
 
-	void setValues();
+
+	void enrollStudent(const Student& student); //Enrollment
+	void viewEnrolledStudents() const; //View Students
+
+	//Assignment
+
+	void addAssignment(const Assignment& assignment);
+	void displayAssignment() const;
+
+
 	//Operator Overloading
 	ClassRoom& operator=(const ClassRoom& other);
 	friend ostream& operator<<(ostream& os, const ClassRoom& classRoom);
